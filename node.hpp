@@ -27,6 +27,8 @@ private:
     Node<T>* right;
 };
 
+
+// getter and setter functions
 template <typename T>
 inline T *Node<T>::getData()
 {
@@ -49,14 +51,14 @@ inline void Node<T>::setRight(Node<T> *newRight)
 template <typename T>
 inline Node<T> *&Node<T>::getLeft()
 {
-    // TODO: insert return statement here
+    
     return this->left;
 }
 
 template <typename T>
 inline Node<T> *&Node<T>::getRight()
 {
-    // TODO: insert return statement here
+    
     return this->right;
 
 }
