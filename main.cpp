@@ -1,5 +1,12 @@
+#include "node.hpp"
+#include "data.hpp"
+#include "bst.hpp"
+
+
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -19,7 +26,7 @@ bool validCommand(string line)
            (line.rfind("listInventory") == 0);
 }
 
-void evalCommand(string line)
+void evalCommand(string line, BST<Data>& bst)
 {
     if (line == ":help")
     {
@@ -29,15 +36,33 @@ void evalCommand(string line)
     else if (line.rfind("find", 0) == 0)
     {
         // Look up the appropriate datastructure to find if the inventory exist
-        cout << "YET TO IMPLEMENT!" << endl;
+        string target;
+        
+        cout << "Please enter the exact id number of the product youd like to look up: " << endl;
+        cin >> target;
+        Node<Data>* found = bst.search(target, bst.getRoot());
+        if(found != nullptr)
+        {
+            found->getData()->print();
+        }
+        else
+        {
+            cout << "There is no product with that id :-(" << endl;
+        }
+        
     }
     // if line starts with listInventory
     else if (line.rfind("listInventory") == 0)
     {
         // Look up the appropriate datastructure to find all inventory belonging to a specific category
-        cout << "YET TO IMPLEMENT!" << endl;
+        string target;
+        cout << "Please enter the category in which youd like to see all products that contain that category: " << endl;
+        cin >> target;
+        bst.printIfContains(bst.getRoot(), target);
     }
 }
+
+
 
 void bootStrap()
 {
@@ -50,15 +75,92 @@ void bootStrap()
     // use proper programming practices
 }
 
+void importList(BST <Data>& bst)
+{
+    fstream input;
+    string line, trash;
+
+    string id, product, brandName, prodAsin, prodCat;
+
+    input.open("amazon_inventory.csv", fstream::in);
+
+    getline(input, trash);
+
+    while(getline(input, line))
+    {
+        stringstream str(line);
+        string temp;
+
+        getline(str, temp, ',');
+        id = temp;
+
+        char first = str.peek();
+        if(first == '"')
+        {
+            str.get();
+            getline(str, temp, '"');
+            product = temp;
+
+            if(str.peek() == ',')
+            {
+                str.get();
+            }
+        }
+        else
+        {
+            getline(str, temp, ',');
+            product = temp;
+        }
+
+        if(str.peek() == ',')
+        {
+            str.get();
+            brandName = "N/A";
+        }
+        else{
+            getline(str, temp, ',');
+            brandName = temp;
+        }
+
+        if(str.peek() == ',')
+        {
+            str.get();
+            prodAsin = "N/A";
+        }
+        else{
+            getline(str, temp, ',');
+            prodAsin = temp;
+        }
+        
+
+        if(str.peek() == '"')
+        {
+            str.get();
+            prodCat = "N/A";
+        }
+        else{
+            getline(str, temp, ',');
+            prodCat = temp;
+        }
+        
+        Data* newData = new Data(id, product, brandName, prodAsin, prodCat);
+        bst.insert(*newData, bst.getRoot());
+        
+    }
+}
+
 int main(int argc, char const *argv[])
 {
+    BST<Data> bst;
+
+    importList(bst);
     string line;
     bootStrap();
     while (getline(cin, line) && line != ":quit")
     {
         if (validCommand(line))
         {
-            evalCommand(line);
+            evalCommand(line, bst);
         }
         else
         {
@@ -68,3 +170,5 @@ int main(int argc, char const *argv[])
     }
     return 0;
 }
+
+
