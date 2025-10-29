@@ -22,7 +22,7 @@ private:
     
 };
 
-
+// returns the root of the bst
 template <typename T>
 Node<T>*& BST<T>::getRoot()
 {
@@ -31,9 +31,11 @@ Node<T>*& BST<T>::getRoot()
 
 
 
+//Basic seach function for a bst
 template <typename T>
 Node<T> *BST<T>::search(const string target, Node<T> *&curNode)
 {
+    
     if(curNode == nullptr)
     {
         return nullptr;
@@ -51,6 +53,7 @@ Node<T> *BST<T>::search(const string target, Node<T> *&curNode)
     }
 }
 
+//prints if the category target is within the category string of the node.
 template <typename T>
 void BST<T>::printIfContains(Node<T> *node, const string &target)
 {
@@ -69,9 +72,15 @@ void BST<T>::printIfContains(Node<T> *node, const string &target)
     printIfContains(node->getRight(), target);
 }
 
+
+// insert function based on the unique id
 template <typename T>
 void BST<T>::insert(T&newData, Node<T> *&cur)
 {
+    if(root == nullptr)
+    {
+        root = cur;
+    }
     if(cur == nullptr)
     {
         cur = new Node<T>(new T(newData));

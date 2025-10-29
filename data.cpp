@@ -1,5 +1,6 @@
 #include "data.hpp"
 
+//constructor for the data class
 Data::Data(string newId, string newProdName, string newBrand, string newAsin, string cat)
 {
     this->id = newId;
@@ -9,6 +10,7 @@ Data::Data(string newId, string newProdName, string newBrand, string newAsin, st
     this->categories = cat;
 }
 
+//setters 
 void Data::setId(string newId)
 {
     this->id = newId;
@@ -29,6 +31,8 @@ void Data::setCategories(string newCategories)
     this->categories = newCategories;
 }
 
+
+//print function to print out all elements stored in the data
 void Data::print()
 {
     cout << "ID: " << this->id << endl;
@@ -39,6 +43,8 @@ void Data::print()
 
 }
 
+
+// getters for the data class
 string Data::getId() const
 {
     return this->id;
